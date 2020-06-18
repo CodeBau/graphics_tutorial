@@ -3,6 +3,7 @@
 
 #include "Maingame.h"						//zalaczamy plik naglowkowy
 
+
 //warunek sprawdzajacy czy nasze okno sie nie wykrzaczylo
 void fatalError(std::string errorString)
 {
@@ -31,7 +32,9 @@ Maingame::~Maingame()
 void Maingame::run()
 {
 	initSystem();
+	_sprite.init(-1.0f, -1.0f, 1.0f, 1.0f);
 	gameLoop();
+
 }
 
 void Maingame::initSystem()
@@ -55,6 +58,7 @@ void Maingame::initSystem()
 		fatalError("SDL_GL context culd not be created!");
 	}
 
+	glewExperimental = true;
 	GLenum error = glewInit();
 	if (error != GLEW_OK)
 	{
@@ -66,7 +70,7 @@ void Maingame::initSystem()
 }
 void Maingame::gameLoop()
 {
-	while (_gameState != GameState::EXIT)		//gra ma dzialac dopuki enum class nie da EXIT
+	while (_gameState != GameState::EXIT)		//gra ma dzialac dopoki enum class nie da EXIT
 	{
 		processInput();
 		drawGame();
@@ -92,21 +96,15 @@ void Maingame::processInput()
 	}
 }
 
+//Draws the gmae using the almighty OpenGL
 void Maingame::drawGame()
 {
 	glClearDepth(1.0);												//czysci glebie 1.0 dowolna wartosc do jakiej gleboskosci ma siegnac
+	//Clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				//czysci inne kolory z ekranu niz podstawowy/ zastosowano OR pojedynczy | bo to jest dzialanie na bitach
 
+	_sprite.draw();
 
-	glEnableClientState(GL_COLOR_ARRAY);
-	glBegin(GL_TRIANGLES);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex2f(0, 0);
-	glVertex2f(0, 0.5f);						//w pikselach
-	glVertex2f(0.5f, 0.5f);
-
-
-	glEnd();
-
+	//Swap ouer buffer and drwa everything to the screen!
 	SDL_GL_SwapWindow(_window);
 }
