@@ -3,6 +3,8 @@
 #include<SDL/SDL.h>
 #include<GL/glew.h>
 
+#include "GLSLProgram.h"
+
 #include "Sprite.h"							//zalaczamy plik naglowkowy
 
 enum class GameState { PLAY, EXIT };		//silny typ wyliczeniowy (ang. strongly-typed enums). https://devcode.pl/cpp11-enum-class/
@@ -20,6 +22,7 @@ public:
 
 private:
 	void initSystem();
+	void initShaders();
 	void gameLoop();
 	void processInput();
 	void drawGame();
@@ -30,5 +33,7 @@ private:
 	GameState _gameState;
 
 	Sprite _sprite;
+
+	GLSLProgram _colorProgram;
 };
 

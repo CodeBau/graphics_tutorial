@@ -2,17 +2,9 @@
 #include <string>						
 
 #include "Maingame.h"						//zalaczamy plik naglowkowy
+#include "Errors.h"						    //zalaczamy plik naglowkowy
+#include "GLSLProgram.h"					//zalaczamy plik naglowkowy
 
-
-//warunek sprawdzajacy czy nasze okno sie nie wykrzaczylo
-void fatalError(std::string errorString)
-{
-	std::cout << errorString << std::endl;
-	std::cout<<"Enter any key to quit...";
-	int tmp;
-	std::cin >> tmp;
-	SDL_Quit();						         //najprostsza komenda konczaca SDL
-}
 
 //ten plik .cpp zawiera ciala klass/funckji itd.
 Maingame::Maingame()						//definicja konstruktora dla Maingame
@@ -67,6 +59,16 @@ void Maingame::initSystem()
 
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);								//RED, BLUE, GREAN, ALPHA/0,0,0, 1.0 - czarny/1,1,1, 1.0 - bialy/ to jest kolor do jakiego czysci glClear(GL_COLOR_BUFFER_BIT 
 
+	initShaders();
+
+}
+
+
+void Maingame::initShaders()
+{
+	_colorProgram.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
+	_colorProgram.addAttribiute("vertexPosition");
+	_colorProgram.linkShaders();
 }
 void Maingame::gameLoop()
 {
@@ -90,7 +92,6 @@ void Maingame::processInput()
 		case SDL_MOUSEMOTION:
 			std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 
-
 		}
 
 	}
@@ -103,7 +104,11 @@ void Maingame::drawGame()
 	//Clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				//czysci inne kolory z ekranu niz podstawowy/ zastosowano OR pojedynczy | bo to jest dzialanie na bitach
 
+	_colorProgram.use();
+
 	_sprite.draw();
+
+	_colorProgram.unuse();
 
 	//Swap ouer buffer and drwa everything to the screen!
 	SDL_GL_SwapWindow(_window);
