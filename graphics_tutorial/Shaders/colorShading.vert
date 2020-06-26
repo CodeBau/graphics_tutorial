@@ -1,8 +1,9 @@
 #version 130
-//The vertex shader operates on ech vertex 
 
-//input data from the VBO. Ech vertex is 2 floats in vec2 vertexPosition;
 in vec2 vertexPosition;
+in vec4 vertexColor;
+
+out vec4 fragmentColor;
 
 void main() {
 	//Set the x,y position on the screen
@@ -11,4 +12,6 @@ void main() {
 	gl_Position.z = 0.0;
 	//Indicate that coordinates are normalized 
 	gl_Position.w = 1.0;
+	
+	fragmentColor = vertexColor;
 }
