@@ -2,20 +2,28 @@
 
 #include <GL/glew.h>
 
-struct Vertex {
-	struct Position {
+
+struct Position {
 		float x;
 		float y;
-	} position;
+};
 
-	struct Color {
+struct Color {
 		GLubyte r;
 		GLubyte g;
 		GLubyte b;
 		GLubyte a;
-	}color;
-									//minimalizujemy wartosc, zeby zoptymalizowac wykorzystanie pamieci.
-									// GLubytes to jest GL unsigned byte [4]- bo mamy red,green,red,alpha 
-									//alpha to jest transparency 
-
 };
+
+//The Vertex definiction
+struct Vertex {
+
+	//This is the position struct. When you store a struct or class inside of another struct or class, 
+	//it is called composition. This is layd out exactly the same in memory as if we had a float 
+	// position [2] but doing it this way makes more sense.
+	Position position;
+
+	//4 bytes for r g b a color. 
+	Color color;
+};
+									

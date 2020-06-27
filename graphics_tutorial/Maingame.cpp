@@ -7,13 +7,14 @@
 
 
 //ten plik .cpp zawiera ciala klass/funckji itd.
-Maingame::Maingame()						//definicja konstruktora dla Maingame
+Maingame::Maingame() : 
+	_scrWidth(1024),    
+	_scrHight(768), 
+	_time(0.0f), 
+	_window(nullptr), 
+	_gameState (GameState::PLAY)					
 {
-	_window = nullptr;						//zabespieczenie przed bugiem pomiedzy inicjacja okna a jego wywolaniem (obiekt bez atrybutow)
-											//ze wzgledu na to ze SDL_Window* jest wskaznikiem _window musi wskazywac nic. 
-	_scrWidth = 1024;
-	_scrHight = 768;
-	_gameState = GameState::PLAY;
+
 }
 
 Maingame::~Maingame()
@@ -76,6 +77,7 @@ void Maingame::gameLoop()
 	while (_gameState != GameState::EXIT)		//gra ma dzialac dopoki enum class nie da EXIT
 	{
 		processInput();
+		_time += 0.01;
 		drawGame();
 	}
 }
@@ -106,6 +108,9 @@ void Maingame::drawGame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				//czysci inne kolory z ekranu niz podstawowy/ zastosowano OR pojedynczy | bo to jest dzialanie na bitach
 
 	_colorProgram.use();
+
+	GLuint timeLocation = _colorProgram.getUniformLocation("time");
+	glUniform1f(timeLocation, _time);
 
 	_sprite.draw();
 

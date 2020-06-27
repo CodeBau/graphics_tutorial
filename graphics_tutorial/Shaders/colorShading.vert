@@ -3,6 +3,7 @@
 in vec2 vertexPosition;
 in vec4 vertexColor;
 
+out vec2 fragmentPosition;
 out vec4 fragmentColor;
 
 void main() {
@@ -13,5 +14,6 @@ void main() {
 	//Indicate that coordinates are normalized 
 	gl_Position.w = 1.0;
 	
+	fragmentPosition = vertexPosition;
 	fragmentColor = vertexColor;
 }
