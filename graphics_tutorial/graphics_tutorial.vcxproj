@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="Errors.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
+    <ClCompile Include="IOManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maingame.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -151,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="Errors.h" />
     <ClInclude Include="GLSLProgram.h" />
+    <ClInclude Include="IOManager.h" />
     <ClInclude Include="Maingame.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Vertex.h" />
