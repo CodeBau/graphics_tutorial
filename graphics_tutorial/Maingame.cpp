@@ -1,16 +1,15 @@
-#include <iostream>						
-#include <string>						
-
 #include "Maingame.h"						//zalaczamy plik naglowkowy
-#include "Errors.h"						    //zalaczamy plik naglowkowy
-#include "GLSLProgram.h"					//zalaczamy plik naglowkowy
+#include "Errors.h"						    //zalaczamy plik naglowkowy					//zalaczamy plik naglowkowy
+#include "ImageLoader.h"
+
+#include <iostream>						
+#include <string>	
 
 
 //ten plik .cpp zawiera ciala klass/funckji itd.
 Maingame::Maingame() : 
 	_scrWidth(1024),    
 	_scrHight(768), 
-	_time(0.0f), 
 	_window(nullptr), 
 	_gameState (GameState::PLAY)					
 {
@@ -26,8 +25,12 @@ void Maingame::run()
 {
 	initSystem();
 	_sprite.init(-1.0f, -1.0f, 2.0f, 2.0f);
+
+	_playerTexture = ImageLoader::loadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+
 	gameLoop();
 
+	
 }
 
 void Maingame::initSystem()
@@ -70,6 +73,7 @@ void Maingame::initShaders()
 	_colorProgram.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
 	_colorProgram.addAttribiute("vertexPosition");
 	_colorProgram.addAttribiute("vertexColor");
+	_colorProgram.addAttribiute("vertexUV");
 	_colorProgram.linkShaders();
 }
 void Maingame::gameLoop()
@@ -77,7 +81,6 @@ void Maingame::gameLoop()
 	while (_gameState != GameState::EXIT)		//gra ma dzialac dopoki enum class nie da EXIT
 	{
 		processInput();
-		_time += 0.01;
 		drawGame();
 	}
 }
@@ -108,12 +111,16 @@ void Maingame::drawGame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				//czysci inne kolory z ekranu niz podstawowy/ zastosowano OR pojedynczy | bo to jest dzialanie na bitach
 
 	_colorProgram.use();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _playerTexture.id);
+	GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
+	glUniform1i(textureLocation, 0);
 
-	GLuint timeLocation = _colorProgram.getUniformLocation("time");
-	glUniform1f(timeLocation, _time);
 
+	//Draw ouer sprite!
 	_sprite.draw();
 
+	glBindTexture(GL_TEXTURE_2D, 0);
 	_colorProgram.unuse();
 
 	//Swap ouer buffer and drwa everything to the screen!

@@ -1,4 +1,5 @@
 #include <vector>
+#include <stddef.h>
 
 /*
 decodePNG: The picoPNG function, decodes a PNG file buffer in memory, into a raw pixel buffer.
@@ -559,15 +560,15 @@ void loadFile(std::vector<unsigned char>& buffer, const std::string& filename) /
     else buffer.clear();
 }
 
-int main(int argc, char* argv[])
+int mainpicopng (int argd, char* argw[])
 {
-    const char* filename = argc > 1 ? argv[1] : "test.png";
+    const char* filename = argd > 1 ? argw[1] : "test.png";
 
     //load and decode
     std::vector<unsigned char> buffer, image;
     loadFile(buffer, filename);
     unsigned long w, h;
-    int error = decodePNG(image, w, h, buffer.empty() ? 0 : &buffer[0], (unsigned long)buffer.size());
+    int error = decodePNG(image, w, h, buffer.empty() ? 0 : &buffer[0], (unsigned long)buffer.size(), true);
 
     //if there's an error, display it
     if (error != 0) std::cout << "error: " << error << std::endl;
