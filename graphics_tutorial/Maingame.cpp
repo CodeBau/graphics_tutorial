@@ -6,10 +6,12 @@
 #include <string>	
 
 
+
 //ten plik .cpp zawiera ciala klass/funckji itd.
-Maingame::Maingame() : 
-	_scrWidth(1024),    
-	_scrHight(768), 
+Maingame::Maingame() :
+	_scrWidth(1024),
+	_scrHight(768),
+	_time(0),
 	_window(nullptr), 
 	_gameState (GameState::PLAY)					
 {
@@ -81,6 +83,7 @@ void Maingame::gameLoop()
 	while (_gameState != GameState::EXIT)		//gra ma dzialac dopoki enum class nie da EXIT
 	{
 		processInput();
+		_time += 0.01;
 		drawGame();
 	}
 }
@@ -103,7 +106,7 @@ void Maingame::processInput()
 	}
 }
 
-//Draws the gmae using the almighty OpenGL
+//Draws the game using the almighty OpenGL
 void Maingame::drawGame()
 {
 	glClearDepth(1.0);												//czysci glebie 1.0 dowolna wartosc do jakiej gleboskosci ma siegnac
@@ -111,11 +114,14 @@ void Maingame::drawGame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				//czysci inne kolory z ekranu niz podstawowy/ zastosowano OR pojedynczy | bo to jest dzialanie na bitach
 
 	_colorProgram.use();
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _playerTexture.id);
 	GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
 	glUniform1i(textureLocation, 0);
 
+	GLint timeLocation = _colorProgram.getUniformLocation("time");
+	glUniform1f(timeLocation, _time);
 
 	//Draw ouer sprite!
 	_sprite.draw();

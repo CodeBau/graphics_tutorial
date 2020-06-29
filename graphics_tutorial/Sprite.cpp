@@ -52,10 +52,11 @@ void Sprite::init(float x, float y, float width, float height) {
 
 	for (int i = 0; i < 6; i++)				//6 - bo tyle dalismy w VertexData
 	{
-		vertexData[i].setColor(255, 0, 0, 0);
+		vertexData[4].setColor(255, 0, 0, 0);
 
 	}
-
+	vertexData[1].setColor(255, 0, 255, 0);
+	vertexData[4].setColor(0, 255, 255, 0);
 	
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);

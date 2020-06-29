@@ -29,7 +29,5 @@ private:
 
 	GLuint _vertexShaderID;
 	GLuint _fragmentShaderID;
-
-
 };
 

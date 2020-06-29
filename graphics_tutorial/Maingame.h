@@ -38,5 +38,7 @@ private:
 	GLSLProgram _colorProgram;
 	GLTexture _playerTexture;
 
+	float _time; 
+
 };
 
