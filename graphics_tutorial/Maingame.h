@@ -1,7 +1,9 @@
 #pragma once							//cos co zabespiecza przed zapetleniem
 
-#include<SDL/SDL.h>
-#include<GL/glew.h>
+#include <SDL/SDL.h>
+#include <GL/glew.h>
+#include <vector>
+
 
 #include "GLSLProgram.h"
 #include "GLTexture.h"
@@ -33,10 +35,10 @@ private:
 	int	_scrHight;
 	GameState _gameState;
 
-	Sprite _sprite;
+	std::vector <Sprite*> _sprites; 
 
 	GLSLProgram _colorProgram;
-	GLTexture _playerTexture;
+	
 
 	float _time; 
 

@@ -1,6 +1,5 @@
 #include "Maingame.h"						//zalaczamy plik naglowkowy
 #include "Errors.h"						    //zalaczamy plik naglowkowy					//zalaczamy plik naglowkowy
-#include "ImageLoader.h"
 
 #include <iostream>						
 #include <string>	
@@ -26,13 +25,14 @@ Maingame::~Maingame()
 void Maingame::run()
 {
 	initSystem();
-	_sprite.init(-1.0f, -1.0f, 2.0f, 2.0f);
 
-	_playerTexture = ImageLoader::loadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	_sprites.push_back(new Sprite());
+	_sprites.back()->init(-1.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+
+	_sprites.push_back(new Sprite());
+	_sprites.back()->init(0.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 
 	gameLoop();
-
-	
 }
 
 void Maingame::initSystem()
@@ -98,8 +98,8 @@ void Maingame::processInput()
 			_gameState = GameState::EXIT;
 			break;
 
-		case SDL_MOUSEMOTION:
-			std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+		//case SDL_MOUSEMOTION:
+			//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 
 		}
 
@@ -116,7 +116,7 @@ void Maingame::drawGame()
 	_colorProgram.use();
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _playerTexture.id);
+	
 	GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
 	glUniform1i(textureLocation, 0);
 
@@ -124,7 +124,8 @@ void Maingame::drawGame()
 	glUniform1f(timeLocation, _time);
 
 	//Draw ouer sprite!
-	_sprite.draw();
+	for (int i = 0; i < _sprites.size(); i++)
+		_sprites[i]->draw();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	_colorProgram.unuse();
