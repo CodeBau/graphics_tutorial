@@ -29,6 +29,7 @@ private:
 	void gameLoop();
 	void processInput();
 	void drawGame();
+	void calculateFPS();
 
 	SDL_Window* _window;				//prywatna zmienna inicjujaca okno, oraz podstawowe czynnosci zwiazne z oknem 
 	int _scrWidth;
@@ -39,8 +40,12 @@ private:
 
 	GLSLProgram _colorProgram;
 	
+	float _fps;
+	float _maxFPS;
+	float _frameTime;
+
+
 
 	float _time; 
-
 };
 

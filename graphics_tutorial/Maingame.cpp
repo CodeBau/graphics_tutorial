@@ -12,7 +12,8 @@ Maingame::Maingame() :
 	_scrHight(768),
 	_time(0),
 	_window(nullptr), 
-	_gameState (GameState::PLAY)					
+	_gameState (GameState::PLAY),
+	_maxFPS (144.0f)
 {
 
 }
@@ -80,11 +81,35 @@ void Maingame::initShaders()
 }
 void Maingame::gameLoop()
 {
+	//Will loop until we set _gameState to EXIT
 	while (_gameState != GameState::EXIT)		//gra ma dzialac dopoki enum class nie da EXIT
 	{
+		//Used for frame time masuring
+		float startTicks = SDL_GetTicks();
+
 		processInput();
 		_time += 0.01;
 		drawGame();
+		calculateFPS();
+
+		//print only once every 10 frames 
+		static int frameCounter = 0;
+		frameCounter++;
+		if (frameCounter == 10)
+		{
+			std::cout << _fps << std::endl;
+			frameCounter = 0;
+
+		}
+
+		float frameTicks = SDL_GetTicks() - startTicks;
+
+		//Limit the FPS to the Max FPS
+		if (1000.0f / _maxFPS > frameTicks) {
+			SDL_Delay(1000.0f / _maxFPS - frameTicks);
+		}
+
+
 	}
 }
 void Maingame::processInput()
@@ -133,3 +158,52 @@ void Maingame::drawGame()
 	//Swap ouer buffer and drwa everything to the screen!
 	SDL_GL_SwapWindow(_window);
 }
+
+void Maingame::calculateFPS()
+{
+	static const int NUM_SAMPLE = 10;
+	static float frameTimes[NUM_SAMPLE];
+	static int currentFrame = 0;
+
+	static float prevTicks = SDL_GetTicks();
+
+	float currentTickes; 
+	currentTickes = SDL_GetTicks();
+
+	_frameTime = currentTickes - prevTicks;
+	frameTimes[currentFrame % NUM_SAMPLE] = _frameTime;
+
+	prevTicks = currentTickes;
+
+	int count;
+
+	currentFrame++;
+
+	if (currentFrame < NUM_SAMPLE)
+	{
+		count = currentFrame;
+	}
+	else
+	{
+		count = NUM_SAMPLE;
+	}
+	float frameTimeAverage = 0;
+
+	for (int i = 0; i < count; i++)
+	{
+		frameTimeAverage += frameTimes[i];
+	}
+
+	frameTimeAverage /= count;
+
+	if (frameTimeAverage > 0)
+	{
+		_fps = 1000.0f / frameTimeAverage;
+	}
+	else
+	{
+		_fps = 60.0f;
+	}
+	
+}
+
