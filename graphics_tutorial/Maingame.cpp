@@ -38,11 +38,10 @@ void Maingame::run()
 
 void Maingame::initSystem()
 {	
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);					//zamiast jednego okna z rysunkiem, bedziemy miec 2 po jednym bedziemy rysowac a drugi bedzie sie czyscil
-	
-
 //inicjujemy SDL 
 	SDL_Init(SDL_INIT_EVERYTHING);
+
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);					//zamiast jednego okna z rysunkiem, bedziemy miec 2 po jednym bedziemy rysowac a drugi bedzie sie czyscil
 
 	_window = SDL_CreateWindow("Game Engine",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _scrWidth, _scrHight, SDL_WINDOW_OPENGL);				//wskaznik bedzie wskazywal okno od teraz
 
@@ -64,7 +63,15 @@ void Maingame::initSystem()
 		fatalError("Could not initialize glew!");
 	}
 
+	//Chceck the OPenGL version 
+	std::printf("*** OpenGLVersion:%s ***", glGetString(GL_VERSION));
+
+	//Set the background color to blue
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);								//RED, BLUE, GREAN, ALPHA/0,0,0, 1.0 - czarny/1,1,1, 1.0 - bialy/ to jest kolor do jakiego czysci glClear(GL_COLOR_BUFFER_BIT 
+
+
+	//Set VSYNC
+	SDL_GL_SetSwapInterval(0);
 
 	initShaders();
 
